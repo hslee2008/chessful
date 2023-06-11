@@ -1,0 +1,23 @@
+.mt-10 {
+  margin-top: 10px;
+}
+
+.timer {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #fff;
+  background-color: #000;
+  padding: 10px;
+  border-radius: 10px;
+  margin-right: 10px;
+}
+
+
+.clock {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
