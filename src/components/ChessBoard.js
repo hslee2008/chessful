@@ -111,6 +111,7 @@ function ChessBoard() {
           smallScreenLimits={smallScreenLimits}
           pieceset={pieceset}
           colorset={colorset}
+          squareSize={56}
           onMovePlayed={move => handleMovePlayed(move)}
         />
       ) : (
@@ -122,8 +123,10 @@ function ChessBoard() {
             smallScreenLimits={smallScreenLimits}
             pieceset={pieceset}
             colorset={colorset}
+            squareSize={56}
             onMovePlayed={move => handleMovePlayed(move)}
           />
+
           <Chessboard
             position={position}
             flipped={true}
@@ -131,6 +134,7 @@ function ChessBoard() {
             smallScreenLimits={smallScreenLimits}
             pieceset={pieceset}
             colorset={colorset}
+            squareSize={56}
             onMovePlayed={move => handleMovePlayed(move)}
           />
         </div>
