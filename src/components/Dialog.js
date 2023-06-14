@@ -5,9 +5,8 @@ import DialogActions from '@mui/material/DialogActions'
 import DialogContent from '@mui/material/DialogContent'
 import DialogContentText from '@mui/material/DialogContentText'
 import DialogTitle from '@mui/material/DialogTitle'
-import { chessAnalysisApi } from 'chess-analysis-api'
 
-function Checkmate({ showDialog, turn, history, fen }) {
+function Checkmate({ showDialog, turn, history }) {
   const [open, setOpen] = useState(false)
 
   const handleClose = () => {
@@ -18,25 +17,8 @@ function Checkmate({ showDialog, turn, history, fen }) {
   React.useEffect(() => {
     if (showDialog) {
       setOpen(true)
-
-      chessAnalysisApi
-        .getAnalysis({
-          fen,
-          depth: 12,
-          multipv: 2
-        })
-        .then(result => {
-          console.log(result)
-          // ...
-        })
-        .catch(error => {
-          console.error(error)
-          throw new Error(error.message)
-
-          // ...
-        })
     }
-  }, [showDialog, fen])
+  }, [showDialog])
 
   return (
     <div>

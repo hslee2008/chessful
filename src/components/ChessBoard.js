@@ -12,6 +12,7 @@ import SettingsIcon from '@mui/icons-material/Settings'
 import Button from '@mui/material/Button'
 import { IconButton } from '@mui/material'
 
+import EvalBar from './EvalBar'
 import { Checkmate, Stalemate, Dead, Time, Start } from './Dialog'
 import Config from './Config'
 import { smallScreenLimits, defaultPosition } from '../config/chessboard'
@@ -27,7 +28,7 @@ function ChessBoard() {
   const { pause, start, toggle, reset: resetTimer, activePlayer } = clock
 
   // Board status
-  const [position, setPosition] = useState(defaultPosition)
+  const [position, setPosition] = useState(new Position(defaultPosition))
   const [turn, setTurn] = useState('w')
   const [history, setHistory] = useState([])
 
@@ -101,86 +102,96 @@ function ChessBoard() {
   }, [white.timer, black.timer])
 
   return (
-    <>
-      <div className="clock">
-        <div className="timer">
-          {TimeFormat.fromMs(white.timer, 'mm:ss').split('.')[0]}
-        </div>
-        <div className="timer">
-          {TimeFormat.fromMs(black.timer, 'mm:ss').split('.')[0]}
-        </div>
+    <div>
+      <div
+        style={ {
+          position: "absolute",
+          left: 0,
+          top: 0,
+          height: '100vh',
+          width: '22px',
+          backgroundColor: '#c4c4c4'
+        }}
+      >
+        <EvalBar depth={30} fen={position.fen()} />
       </div>
 
-      {!two ? (
-        <Chessboard
-          position={position}
-          flipped={flipped}
-          interactionMode="playMoves"
-          smallScreenLimits={smallScreenLimits}
-          pieceset={pieceset}
-          colorset={colorset}
-          squareSize={56}
-          onMovePlayed={move => handleMovePlayed(move)}
+      <div>
+        <div className="clock">
+          <div className="timer">
+            {TimeFormat.fromMs(white.timer, 'mm:ss').split('.')[0]}
+          </div>
+          <div className="timer">
+            {TimeFormat.fromMs(black.timer, 'mm:ss').split('.')[0]}
+          </div>
+        </div>
+
+        {!two ? (
+          <Chessboard
+            position={position}
+            flipped={flipped}
+            interactionMode="playMoves"
+            smallScreenLimits={smallScreenLimits}
+            pieceset={pieceset}
+            colorset={colorset}
+            squareSize={56}
+            onMovePlayed={move => handleMovePlayed(move)}
+          />
+        ) : (
+          <div className="two-boards">
+            <Chessboard
+              position={position}
+              flipped={false}
+              interactionMode="playMoves"
+              smallScreenLimits={smallScreenLimits}
+              pieceset={pieceset}
+              colorset={colorset}
+              squareSize={56}
+              onMovePlayed={move => handleMovePlayed(move)}
+            />
+
+            <Chessboard
+              position={position}
+              flipped={true}
+              interactionMode="playMoves"
+              smallScreenLimits={smallScreenLimits}
+              pieceset={pieceset}
+              colorset={colorset}
+              squareSize={56}
+              onMovePlayed={move => handleMovePlayed(move)}
+            />
+          </div>
+        )}
+
+        <Checkmate showDialog={checkmateDialog} turn={turn} history={history} />
+        <Stalemate showDialog={staleMateDialog} history={history} />
+        <Dead showDialog={insufficientMaterial} history={history} />
+        <Time showDialog={time} white={white.timer} black={black.timer} />
+        <Start start={startGame} showDialog={startingDialog} />
+        <Config
+          show={configOpened}
+          setShow={setConfigOpened}
+          setTwo={setTwo}
+          setColorset={setColorset}
+          setPieceset={setPieceset}
         />
-      ) : (
-        <div className="two-boards">
-          <Chessboard
-            position={position}
-            flipped={false}
-            interactionMode="playMoves"
-            smallScreenLimits={smallScreenLimits}
-            pieceset={pieceset}
-            colorset={colorset}
-            squareSize={56}
-            onMovePlayed={move => handleMovePlayed(move)}
-          />
 
-          <Chessboard
-            position={position}
-            flipped={true}
-            interactionMode="playMoves"
-            smallScreenLimits={smallScreenLimits}
-            pieceset={pieceset}
-            colorset={colorset}
-            squareSize={56}
-            onMovePlayed={move => handleMovePlayed(move)}
-          />
+        <div className="toolbar">
+          <Button
+            onClick={() => setConfigOpened(true)}
+            startIcon={<SettingsIcon />}
+          >
+            Config
+          </Button>
+          <Button onClick={reset} startIcon={<RestartAltIcon />}>
+            Reset
+          </Button>
+          <IconButton onClick={pause}>
+            {activePlayer === null ? <PlayArrowIcon /> : <PauseIcon />}
+          </IconButton>
         </div>
-      )}
-
-      <Checkmate
-        showDialog={checkmateDialog}
-        turn={turn}
-        history={history}
-        fen={position.fen()}
-      />
-      <Stalemate showDialog={staleMateDialog} history={history} />
-      <Dead showDialog={insufficientMaterial} history={history} />
-      <Time showDialog={time} white={white.timer} black={black.timer} />
-      <Start start={startGame} showDialog={startingDialog} />
-      <Config
-        show={configOpened}
-        setShow={setConfigOpened}
-        setTwo={setTwo}
-        setColorset={setColorset}
-        setPieceset={setPieceset}
-      />
-
-      <div className="toolbar">
-        <Button
-          onClick={() => setConfigOpened(true)}
-          startIcon={<SettingsIcon />}
-        >
-          Config
-        </Button>
-        <Button onClick={reset} startIcon={<RestartAltIcon />}>
-          Reset
-        </Button>
-        <IconButton onClick={pause}>
-          {activePlayer === null ? <PlayArrowIcon /> : <PauseIcon />}
-        </IconButton>
       </div>
-    </>
+    </div>
   )
 }
 
