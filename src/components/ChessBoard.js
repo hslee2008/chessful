@@ -5,11 +5,14 @@ import useChessClock from 'react-chess-clock'
 
 import TimeFormat from 'hh-mm-ss'
 
+import PlayArrowIcon from '@mui/icons-material/PlayArrow'
+import PauseIcon from '@mui/icons-material/Pause'
 import RestartAltIcon from '@mui/icons-material/RestartAlt'
 import SettingsIcon from '@mui/icons-material/Settings'
 import Button from '@mui/material/Button'
+import { IconButton } from '@mui/material'
 
-import { Checkmate, Stalemate, Dead, Time } from './Dialog'
+import { Checkmate, Stalemate, Dead, Time, Start } from './Dialog'
 import Config from './Config'
 import { smallScreenLimits, defaultPosition } from '../config/chessboard'
 
@@ -21,7 +24,7 @@ function ChessBoard() {
   const [players, clock] = useChessClock(initialTimer)
 
   const { white, black } = players
-  const { start, toggle, reset: resetTimer } = clock
+  const { pause, start, toggle, reset: resetTimer, activePlayer } = clock
 
   // Board status
   const [position, setPosition] = useState(defaultPosition)
@@ -44,11 +47,11 @@ function ChessBoard() {
   const [insufficientMaterial, setInsufficientMaterial] = useState(false)
   const [configOpened, setConfigOpened] = useState(false)
   const [time, setTime] = useState(false)
-
-  start()
+  const [startingDialog, setStartingDialog] = useState(false)
 
   function handleMovePlayed(move) {
-    toggle()
+    if (activePlayer !== null) toggle()
+    else return
 
     const newPosition = new Position(position)
     newPosition.play(move)
@@ -84,6 +87,11 @@ function ChessBoard() {
     setStaleMateDialog(false)
     setInsufficientMaterial(false)
     resetTimer()
+    setStartingDialog(true)
+  }
+
+  const startGame = () => {
+    start()
   }
 
   useEffect(() => {
@@ -96,10 +104,10 @@ function ChessBoard() {
     <>
       <div className="clock">
         <div className="timer">
-          {TimeFormat.fromMs(white.timer, 'mm:ss.sss')}
+          {TimeFormat.fromMs(white.timer, 'mm:ss').split('.')[0]}
         </div>
         <div className="timer">
-          {TimeFormat.fromMs(black.timer, 'mm:ss.sss')}
+          {TimeFormat.fromMs(black.timer, 'mm:ss').split('.')[0]}
         </div>
       </div>
 
@@ -144,6 +152,7 @@ function ChessBoard() {
       <Stalemate showDialog={staleMateDialog} history={history} />
       <Dead showDialog={insufficientMaterial} history={history} />
       <Time showDialog={time} white={white.timer} black={black.timer} />
+      <Start start={startGame} showDialog={startingDialog} />
       <Config
         show={configOpened}
         setShow={setConfigOpened}
@@ -162,6 +171,9 @@ function ChessBoard() {
         <Button onClick={reset} startIcon={<RestartAltIcon />}>
           Reset
         </Button>
+        <IconButton onClick={pause}>
+          {activePlayer === null ? <PlayArrowIcon /> : <PauseIcon />}
+        </IconButton>
       </div>
     </>
   )

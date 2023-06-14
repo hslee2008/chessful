@@ -178,4 +178,41 @@ function Dead({ showDialog, history }) {
   )
 }
 
-export { Checkmate, Stalemate, Dead, Time }
+function Start({ start, showDialog }) {
+  const [open, setOpen] = useState(true)
+
+  const handleClose = () => {
+    setOpen(false)
+    start()
+  }
+
+  // Show the dialog when `showDialog` prop is true
+  React.useEffect(() => {
+    if (showDialog) {
+      setOpen(true)
+    }
+  }, [ showDialog ] )
+
+  return (
+    <div>
+      <Dialog
+        open={open}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">{'Start'}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Click on the piece you want to move and then click on the square you
+            want to move to.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Start</Button>
+        </DialogActions>
+      </Dialog>
+    </div>
+  )
+}
+
+export { Checkmate, Stalemate, Dead, Time, Start }
