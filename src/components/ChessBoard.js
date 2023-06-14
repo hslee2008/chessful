@@ -148,7 +148,12 @@ function ChessBoard() {
         </div>
       )}
 
-      <Checkmate showDialog={checkmateDialog} turn={turn} history={history} />
+      <Checkmate
+        showDialog={checkmateDialog}
+        turn={turn}
+        history={history}
+        fen={position.fen()}
+      />
       <Stalemate showDialog={staleMateDialog} history={history} />
       <Dead showDialog={insufficientMaterial} history={history} />
       <Time showDialog={time} white={white.timer} black={black.timer} />
