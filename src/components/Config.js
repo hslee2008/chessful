@@ -21,7 +21,8 @@ export default function Config({
   setPieceset,
   setEval,
   setTimer,
-  setDisplayOpening
+  setDisplayOpening,
+  setColor
 }) {
   const [two, setTwoCheckBox] = useState(localStorage.getItem('two') === 'true')
   const [flipping, setFlipping] = useState(
@@ -41,6 +42,9 @@ export default function Config({
   )
   const [opening, setOpening] = useState(
     localStorage.getItem('opening') === 'true' || false
+  )
+  const [colorCode, setColorCode] = useState(
+    localStorage.getItem('color') === 'true' || false
   )
 
   const handleFlipping = () => {
@@ -69,6 +73,12 @@ export default function Config({
     localStorage.setItem('opening', !opening)
     setOpening(!opening)
     setDisplayOpening(!opening)
+  }
+
+  const handleColor = () => {
+    localStorage.setItem('color', !colorCode)
+    setColorCode(!colorCode)
+    setColor(!colorCode)
   }
 
   const handleClose = () => {
@@ -145,6 +155,10 @@ export default function Config({
           <FormControlLabel
             label="Opening"
             control={<Checkbox checked={opening} onChange={handleOpening} />}
+          />
+          <FormControlLabel
+            label="Color"
+            control={<Checkbox checked={colorCode} onChange={handleColor} />}
           />
         </DialogContent>
         <DialogActions>

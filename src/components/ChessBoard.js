@@ -13,6 +13,8 @@ import Button from '@mui/material/Button'
 import { IconButton } from '@mui/material'
 
 import { findOpening } from '../utils/findOpening'
+import parseNotation from '../utils/parseNotation'
+
 import EvalBar from './EvalBar'
 import { Checkmate, Stalemate, Dead, Time, Start } from './Dialog'
 import Config from './Config'
@@ -33,6 +35,9 @@ function ChessBoard() {
   const [turn, setTurn] = useState('w')
   const [history, setHistory] = useState([])
   const [opening, setOpening] = useState(null)
+  const [latestMove, setLatestMove] = useState(null)
+  const [isCheck, setIsCheck] = useState(false)
+  const [king, setKing] = useState(null)
 
   // Board configuration
   const [flipped, setFlipped] = useState(false)
@@ -52,6 +57,9 @@ function ChessBoard() {
   const [displayOpening, setDisplayOpening] = useState(
     localStorage.getItem('opening') === 'true' || false
   )
+  const [color, setColor] = useState(
+    localStorage.getItem('color') === 'true' || false
+  )
 
   // Dialogs
   const [checkmateDialog, setCheckmateDialog] = useState(false)
@@ -68,9 +76,8 @@ function ChessBoard() {
     const newPosition = new Position(position)
     newPosition.play(move)
     setPosition(newPosition)
-    setTurn(newPosition.turn())
     setCurrent(current.play(move))
-
+    setLatestMove(move)
     setHistory([...history, move])
 
     if (localStorage.getItem('flipping') === 'true') {
@@ -79,6 +86,13 @@ function ChessBoard() {
 
     if (newPosition.isCheckmate()) {
       setCheckmateDialog(true)
+    }
+
+    if (newPosition.isCheck()) {
+      setIsCheck(true)
+      setKing(newPosition.kingSquare(turn === 'w' ? 'b' : 'w'))
+    } else {
+      setIsCheck(false)
     }
 
     if (newPosition.isStalemate()) {
@@ -90,6 +104,8 @@ function ChessBoard() {
     }
 
     setOpening(findOpening(newPosition.fen()))
+
+    setTurn(newPosition.turn())
   }
 
   const reset = () => {
@@ -149,6 +165,12 @@ function ChessBoard() {
             pieceset={pieceset}
             colorset={colorset}
             squareSize={56}
+            squareMarkers={
+              color
+                ? (latestMove ? `Y${parseNotation(latestMove)}` : '') +
+                  (isCheck ? `,R${king}` : '')
+                : null
+            }
             onMovePlayed={move => handleMovePlayed(move)}
           />
         ) : (
@@ -161,6 +183,12 @@ function ChessBoard() {
               pieceset={pieceset}
               colorset={colorset}
               squareSize={56}
+              squareMarkers={
+                color
+                  ? (latestMove ? `Y${parseNotation(latestMove)}` : '') +
+                    (isCheck ? `,R${king}` : '')
+                  : null
+              }
               onMovePlayed={move => handleMovePlayed(move)}
             />
 
@@ -172,6 +200,12 @@ function ChessBoard() {
               pieceset={pieceset}
               colorset={colorset}
               squareSize={56}
+              squareMarkers={
+                color
+                  ? (latestMove ? `Y${parseNotation(latestMove)}` : '') +
+                    (isCheck ? `,R${king}` : '')
+                  : null
+              }
               onMovePlayed={move => handleMovePlayed(move)}
             />
           </div>
@@ -191,6 +225,7 @@ function ChessBoard() {
           setEval={setEval}
           setTimer={setTimer}
           setDisplayOpening={setDisplayOpening}
+          setColor={setColor}
         />
 
         <div className="toolbar">

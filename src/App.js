@@ -1,5 +1,5 @@
-import './css/App.css'
-import './css/utils.css'
+import './css/Layout.css'
+import './css/Component.css'
 import './css/kokopu.css'
 import ChessBoard from './components/ChessBoard'
 
