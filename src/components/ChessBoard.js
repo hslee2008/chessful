@@ -117,6 +117,10 @@ function ChessBoard() {
     setStaleMateDialog(false)
     setInsufficientMaterial(false)
     resetTimer()
+    setLatestMove(null)
+    setHistory([])
+    setOpening(null)
+    setIsCheck(false)
     setStartingDialog(true)
   }
 
