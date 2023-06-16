@@ -298,6 +298,8 @@ module.exports = function (webpackEnv) {
         fs: false,
         readline: false,
         crypto: false,
+        os: false,
+        child_process: false
       },
       // This allows you to set a fallback for where webpack should look for modules.
       // We placed these paths second because we want `node_modules` to "win"

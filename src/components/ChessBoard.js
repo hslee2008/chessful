@@ -12,6 +12,7 @@ import SettingsIcon from '@mui/icons-material/Settings'
 import Button from '@mui/material/Button'
 import { IconButton } from '@mui/material'
 
+import { findOpening } from '../utils/findOpening'
 import EvalBar from './EvalBar'
 import { Checkmate, Stalemate, Dead, Time, Start } from './Dialog'
 import Config from './Config'
@@ -31,6 +32,7 @@ function ChessBoard() {
   const [position, setPosition] = useState(new Position(defaultPosition))
   const [turn, setTurn] = useState('w')
   const [history, setHistory] = useState([])
+  const [opening, setOpening] = useState(null)
 
   // Board configuration
   const [flipped, setFlipped] = useState(false)
@@ -46,6 +48,9 @@ function ChessBoard() {
   )
   const [timer, setTimer] = useState(
     localStorage.getItem('timer') === 'true' || false
+  )
+  const [displayOpening, setDisplayOpening] = useState(
+    localStorage.getItem('opening') === 'true' || false
   )
 
   // Dialogs
@@ -83,6 +88,8 @@ function ChessBoard() {
     if (newPosition.isDead()) {
       setInsufficientMaterial(true)
     }
+
+    setOpening(findOpening(newPosition.fen()))
   }
 
   const reset = () => {
@@ -124,6 +131,14 @@ function ChessBoard() {
             </div>
           </div>
         )}
+
+        <div className="opening">
+          {opening && displayOpening && (
+            <div>
+              <span className="opening-name">{opening}</span>
+            </div>
+          )}
+        </div>
 
         {!two ? (
           <Chessboard
@@ -175,6 +190,7 @@ function ChessBoard() {
           setPieceset={setPieceset}
           setEval={setEval}
           setTimer={setTimer}
+          setDisplayOpening={setDisplayOpening}
         />
 
         <div className="toolbar">

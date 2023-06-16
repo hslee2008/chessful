@@ -44,3 +44,17 @@
   gap: 10px;
   margin-bottom: 10px;
 }
+
+.opening {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.opening-name {
+  font-size: 1.5rem;
+  font-weight: bold;
+}

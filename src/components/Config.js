@@ -20,7 +20,8 @@ export default function Config({
   setColorset,
   setPieceset,
   setEval,
-  setTimer
+  setTimer,
+  setDisplayOpening
 }) {
   const [two, setTwoCheckBox] = useState(localStorage.getItem('two') === 'true')
   const [flipping, setFlipping] = useState(
@@ -37,6 +38,9 @@ export default function Config({
   )
   const [timer, setTimerBar] = useState(
     localStorage.getItem('timer') === 'true' || false
+  )
+  const [opening, setOpening] = useState(
+    localStorage.getItem('opening') === 'true' || false
   )
 
   const handleFlipping = () => {
@@ -59,6 +63,12 @@ export default function Config({
     localStorage.setItem('timer', !timer)
     setTimerBar(!timer)
     setTimer(!timer)
+  }
+
+  const handleOpening = () => {
+    localStorage.setItem('opening', !opening)
+    setOpening(!opening)
+    setDisplayOpening(!opening)
   }
 
   const handleClose = () => {
@@ -131,6 +141,10 @@ export default function Config({
           <FormControlLabel
             label="Timer"
             control={<Checkbox checked={timer} onChange={handleTimer} />}
+          />
+          <FormControlLabel
+            label="Opening"
+            control={<Checkbox checked={opening} onChange={handleOpening} />}
           />
         </DialogContent>
         <DialogActions>
