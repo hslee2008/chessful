@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import Chess from 'chess.js'
+import '../css/EvalBar.css'
 
 let stockfish = new Worker('/stockfish.js')
 
@@ -102,21 +103,21 @@ const EvalBar = ({ fen, depth }) => {
   }, [FEN, depth])
 
   return (
-    <div key={100} className="md:w-10 w-8 h-full mr-1">
+    <div key={100} className="evalBar">
       <div
         style={{ height: `${100 - wHeight}%` }}
-        className="w-full bg-black transition ease-in-out duration-700 text-center"
+        className="black-eval"
       >
-        <span className="text-sm font-bold text-white">
+        <span className="black-text">
           {wHeight < 50 ? sfEval : ''}
         </span>
       </div>
       <div
         style={{ height: `${wHeight}%` }}
-        className="w-full bg-gray-300 transition ease-in-out duration-700 text-center"
+        className="white-eval"
       >
         <div style={{ flex: '1' }} />
-        <span className="text-sm font-bold text-black">
+        <span className="white-text">
           {wHeight >= 50 ? sfEval : ''}
         </span>
       </div>

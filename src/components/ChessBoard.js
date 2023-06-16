@@ -41,13 +41,19 @@ function ChessBoard() {
   const [pieceset, setPieceset] = useState(
     localStorage.getItem('pieceset') || 'cburnett'
   )
+  const [evalBar, setEval] = useState(
+    localStorage.getItem('eval') === 'true' || false
+  )
+  const [timer, setTimer] = useState(
+    localStorage.getItem('timer') === 'true' || false
+  )
 
   // Dialogs
   const [checkmateDialog, setCheckmateDialog] = useState(false)
   const [staleMateDialog, setStaleMateDialog] = useState(false)
   const [insufficientMaterial, setInsufficientMaterial] = useState(false)
   const [configOpened, setConfigOpened] = useState(false)
-  const [time, setTime] = useState(false)
+  const [time, setTimeLose] = useState(false)
   const [startingDialog, setStartingDialog] = useState(false)
 
   function handleMovePlayed(move) {
@@ -80,7 +86,7 @@ function ChessBoard() {
   }
 
   const reset = () => {
-    setPosition(defaultPosition)
+    setPosition(new Position(defaultPosition))
     setTurn('w')
     setFlipped(false)
     setCurrent(game.mainVariation())
@@ -96,35 +102,28 @@ function ChessBoard() {
   }
 
   useEffect(() => {
-    if (white.timer === 0 || black.timer === 0) {
-      setTime(true)
-    }
-  }, [white.timer, black.timer])
+    if ((white.timer === 0 || black.timer === 0) && timer) setTimeLose(true)
+  }, [white.timer, black.timer, timer])
 
   return (
     <div>
-      <div
-        style={ {
-          position: "absolute",
-          left: 0,
-          top: 0,
-          height: '100vh',
-          width: '22px',
-          backgroundColor: '#c4c4c4'
-        }}
-      >
-        <EvalBar depth={30} fen={position.fen()} />
-      </div>
+      {evalBar && (
+        <div className="eval-container">
+          <EvalBar depth={30} fen={position.fen()} />
+        </div>
+      )}
 
       <div>
-        <div className="clock">
-          <div className="timer">
-            {TimeFormat.fromMs(white.timer, 'mm:ss').split('.')[0]}
+        {timer && (
+          <div className="clock">
+            <div className="timer">
+              {TimeFormat.fromMs(white.timer, 'mm:ss').split('.')[0]}
+            </div>
+            <div className="timer">
+              {TimeFormat.fromMs(black.timer, 'mm:ss').split('.')[0]}
+            </div>
           </div>
-          <div className="timer">
-            {TimeFormat.fromMs(black.timer, 'mm:ss').split('.')[0]}
-          </div>
-        </div>
+        )}
 
         {!two ? (
           <Chessboard
@@ -174,6 +173,8 @@ function ChessBoard() {
           setTwo={setTwo}
           setColorset={setColorset}
           setPieceset={setPieceset}
+          setEval={setEval}
+          setTimer={setTimer}
         />
 
         <div className="toolbar">
@@ -186,9 +187,11 @@ function ChessBoard() {
           <Button onClick={reset} startIcon={<RestartAltIcon />}>
             Reset
           </Button>
-          <IconButton onClick={pause}>
-            {activePlayer === null ? <PlayArrowIcon /> : <PauseIcon />}
-          </IconButton>
+          {timer && (
+            <IconButton onClick={pause}>
+              {activePlayer === null ? <PlayArrowIcon /> : <PauseIcon />}
+            </IconButton>
+          )}
         </div>
       </div>
     </div>

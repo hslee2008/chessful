@@ -1,0 +1,52 @@
+.evalBar {
+  margin-right: 0.25rem;
+  width: 2rem;
+  height: 100%;
+}
+
+@media (min-width: 768px) {
+  .evalBar {
+    width: 2.5rem;
+  }
+}
+
+.black-eval {
+  background-color: #000000;
+  transition-property: background-color, border-color, color, fill, stroke,
+    opacity, box-shadow, transform;
+  transition-duration: 800ms;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.white-eval {
+  background-color: #d1d5db;
+  transition-property: background-color, border-color, color, fill, stroke,
+    opacity, box-shadow, transform;
+  transition-duration: 800ms;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  text-align: center;
+  width: 100%;
+}
+
+.black-text {
+  color: #ffffff;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 700;
+}
+
+.white-text {
+  color: #000000;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 700;
+}
+
+.eval-container {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100vh;
+  width: 22px;
+  background-color: #c4c4c4;
+}

@@ -18,7 +18,9 @@ export default function Config({
   setShow,
   setTwo,
   setColorset,
-  setPieceset
+  setPieceset,
+  setEval,
+  setTimer
 }) {
   const [two, setTwoCheckBox] = useState(localStorage.getItem('two') === 'true')
   const [flipping, setFlipping] = useState(
@@ -30,6 +32,12 @@ export default function Config({
   const [pieceset, setPiecesetIn] = useState(
     localStorage.getItem('pieceset') || 'cburnett'
   )
+  const [evalBar, setEvalBar] = useState(
+    localStorage.getItem('eval') === 'true' || false
+  )
+  const [timer, setTimerBar] = useState(
+    localStorage.getItem('timer') === 'true' || false
+  )
 
   const handleFlipping = () => {
     localStorage.setItem('flipping', !flipping)
@@ -39,6 +47,18 @@ export default function Config({
   const handleTwo = () => {
     localStorage.setItem('two', !two)
     setTwoCheckBox(!two)
+  }
+
+  const handleEval = () => {
+    localStorage.setItem('eval', !evalBar)
+    setEvalBar(!evalBar)
+    setEval(!evalBar)
+  }
+
+  const handleTimer = () => {
+    localStorage.setItem('timer', !timer)
+    setTimerBar(!timer)
+    setTimer(!timer)
   }
 
   const handleClose = () => {
@@ -103,6 +123,15 @@ export default function Config({
               ))}
             </Select>
           </FormControl>
+
+          <FormControlLabel
+            label="Eval Bar"
+            control={<Checkbox checked={evalBar} onChange={handleEval} />}
+          />
+          <FormControlLabel
+            label="Timer"
+            control={<Checkbox checked={timer} onChange={handleTimer} />}
+          />
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Close</Button>
