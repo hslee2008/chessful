@@ -14,6 +14,8 @@ import { IconButton } from '@mui/material'
 
 import { findOpening } from '../utils/findOpening'
 import parseNotation from '../utils/parseNotation'
+import { getBestMove } from '../utils/bestNextMove'
+import { coordinateToSan } from '../utils/coordinateToSan'
 
 import EvalBar from './EvalBar'
 import { Checkmate, Stalemate, Dead, Time, Start } from './Dialog'
@@ -34,10 +36,12 @@ function ChessBoard() {
   const [position, setPosition] = useState(new Position(defaultPosition))
   const [turn, setTurn] = useState('w')
   const [history, setHistory] = useState([])
+  const [bestHistory, setBestHistory] = useState([])
   const [opening, setOpening] = useState(null)
   const [latestMove, setLatestMove] = useState(null)
   const [isCheck, setIsCheck] = useState(false)
   const [king, setKing] = useState(null)
+  const [openingLength, setOpeningLength] = useState(0)
 
   // Board configuration
   const [flipped, setFlipped] = useState(false)
@@ -69,7 +73,7 @@ function ChessBoard() {
   const [time, setTimeLose] = useState(false)
   const [startingDialog, setStartingDialog] = useState(false)
 
-  function handleMovePlayed(move) {
+  async function handleMovePlayed(move) {
     if (activePlayer !== null) toggle()
     else return
 
@@ -79,6 +83,10 @@ function ChessBoard() {
     setCurrent(current.play(move))
     setLatestMove(move)
     setHistory([...history, move])
+
+    setOpening(findOpening(newPosition.fen()))
+    const moveBest = await getBestMove(position.fen(), 10, turn)
+    setBestHistory([...bestHistory, moveBest])
 
     if (localStorage.getItem('flipping') === 'true') {
       setFlipped(!flipped)
@@ -103,7 +111,9 @@ function ChessBoard() {
       setInsufficientMaterial(true)
     }
 
-    setOpening(findOpening(newPosition.fen()))
+    if (opening !== null) {
+      setOpeningLength(openingLength + 1)
+    }
 
     setTurn(newPosition.turn())
   }
@@ -139,7 +149,6 @@ function ChessBoard() {
           <EvalBar depth={30} fen={position.fen()} />
         </div>
       )}
-
       <div>
         {timer && (
           <div className="clock">
@@ -215,7 +224,13 @@ function ChessBoard() {
           </div>
         )}
 
-        <Checkmate showDialog={checkmateDialog} turn={turn} history={history} />
+        <Checkmate
+          showDialog={checkmateDialog}
+          turn={turn}
+          history={history}
+          bestHistory={bestHistory}
+          openingLength={openingLength}
+        />
         <Stalemate showDialog={staleMateDialog} history={history} />
         <Dead showDialog={insufficientMaterial} history={history} />
         <Time showDialog={time} white={white.timer} black={black.timer} />

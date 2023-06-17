@@ -6,7 +6,9 @@ import DialogContent from '@mui/material/DialogContent'
 import DialogContentText from '@mui/material/DialogContentText'
 import DialogTitle from '@mui/material/DialogTitle'
 
-function Checkmate({ showDialog, turn, history }) {
+import { GameEndPlayStat } from './Stat'
+
+function Checkmate({ showDialog, turn, history, bestHistory, openingLength }) {
   const [open, setOpen] = useState(false)
 
   const handleClose = () => {
@@ -40,13 +42,11 @@ function Checkmate({ showDialog, turn, history }) {
             game
             <br />
             <br />
-            {history.map((move, index) => (
-              <span key={index}>
-                {move}
-                {index !== history.length - 1 && ','}
-                {'\n'}
-              </span>
-            ))}
+            <GameEndPlayStat
+              history={history}
+              bestHistory={bestHistory}
+              openingLength={openingLength}
+            />
           </DialogContentText>
         </DialogContent>
         <DialogActions>
