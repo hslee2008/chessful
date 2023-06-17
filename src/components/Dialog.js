@@ -7,8 +7,16 @@ import DialogContentText from '@mui/material/DialogContentText'
 import DialogTitle from '@mui/material/DialogTitle'
 
 import { GameEndPlayStat } from './Stat'
+import { Analyze } from './Analyze'
 
-function Checkmate({ showDialog, turn, history, bestHistory, openingLength }) {
+function Checkmate({
+  showDialog,
+  turn,
+  history,
+  bestHistory,
+  openingLength,
+  elo
+}) {
   const [open, setOpen] = useState(false)
 
   const handleClose = () => {
@@ -32,19 +40,19 @@ function Checkmate({ showDialog, turn, history, bestHistory, openingLength }) {
         maxWidth="sm"
         fullWidth
       >
-        <DialogTitle id="alert-dialog-title">{'Checkmate'}</DialogTitle>
+        <DialogTitle id="alert-dialog-title">{`Checkmate (${
+          turn === 'w' ? 'Black' : 'White'
+        } Wins)`}</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            {turn === 'w' ? 'Black' : 'White'} is the <mark>winner</mark> of the
-            game
-            <br />
-            {turn === 'w' ? 'White' : 'Black'} is the <mark>loser</mark> of the
-            game
-            <br />
-            <br />
             <GameEndPlayStat
               history={history}
               bestHistory={bestHistory}
+              openingLength={openingLength}
+            />
+            <Analyze
+              history={history}
+              elo={elo}
               openingLength={openingLength}
             />
           </DialogContentText>
@@ -57,7 +65,15 @@ function Checkmate({ showDialog, turn, history, bestHistory, openingLength }) {
   )
 }
 
-function Time({ showDialog, white, black }) {
+function Time({
+  showDialog,
+  white,
+  black,
+  history,
+  bestHistory,
+  openingLength,
+  elo
+}) {
   const [open, setOpen] = useState(false)
 
   const handleClose = () => {
@@ -86,6 +102,16 @@ function Time({ showDialog, white, black }) {
           <DialogContentText id="alert-dialog-description">
             {white === 0 ? 'Black' : 'White'} is the <mark>winner</mark> of the
             game
+            <GameEndPlayStat
+              history={history}
+              bestHistory={bestHistory}
+              openingLength={openingLength}
+            />
+            <Analyze
+              history={history}
+              elo={elo}
+              openingLength={openingLength}
+            />
           </DialogContentText>
         </DialogContent>
         <DialogActions>
@@ -96,7 +122,7 @@ function Time({ showDialog, white, black }) {
   )
 }
 
-function Stalemate({ showDialog, history }) {
+function Stalemate({ showDialog, history, bestHistory, openingLength, elo }) {
   const [open, setOpen] = useState(false)
 
   const handleClose = () => {
@@ -120,12 +146,19 @@ function Stalemate({ showDialog, history }) {
         maxWidth="sm"
         fullWidth
       >
-        <DialogTitle id="alert-dialog-title">{'Stalemate'}</DialogTitle>
+        <DialogTitle id="alert-dialog-title">{'Stalemate (Draw)'}</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            The game is a <mark>draw</mark>
-            <br />
-            Thre is no legal play for the king
+            <GameEndPlayStat
+              history={history}
+              bestHistory={bestHistory}
+              openingLength={openingLength}
+            />
+            <Analyze
+              history={history}
+              elo={elo}
+              openingLength={openingLength}
+            />
           </DialogContentText>
         </DialogContent>
         <DialogActions>
@@ -136,7 +169,7 @@ function Stalemate({ showDialog, history }) {
   )
 }
 
-function Dead({ showDialog, history }) {
+function Dead({ showDialog, history, bestHistory, openingLength, elo }) {
   const [open, setOpen] = useState(false)
 
   const handleClose = () => {
@@ -161,13 +194,20 @@ function Dead({ showDialog, history }) {
         fullWidth
       >
         <DialogTitle id="alert-dialog-title">
-          {'Insufficient Material'}
+          {'Insufficient Material (Draw)'}
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            The game is a <mark>draw</mark>
-            <br />
-            There are not enough pieces to force a checkmate
+            <GameEndPlayStat
+              history={history}
+              bestHistory={bestHistory}
+              openingLength={openingLength}
+            />
+            <Analyze
+              history={history}
+              elo={elo}
+              openingLength={openingLength}
+            />
           </DialogContentText>
         </DialogContent>
         <DialogActions>

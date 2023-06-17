@@ -18,25 +18,6 @@ export function GameEndPlayStat({ history, bestHistory, openingLength }) {
 
   return (
     <div>
-      {' '}
-      {history.map((move, index) => (
-        <span key={index}>
-          {move}
-          {index !== history.length - 1 && ','}
-          {'\n'}
-        </span>
-      ))}
-      <br />
-      <br />
-      {bestHistory.map((move, index) => (
-        <span key={index}>
-          {move}
-          {index !== history.length - 1 && ','}
-          {'\n'}
-        </span>
-      ))}
-      <br />
-      <br />
       white: {whiteAccuracy}%<br />
       black: {blackAccuracy}%
     </div>

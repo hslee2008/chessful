@@ -35,13 +35,16 @@ function ChessBoard() {
   // Board status
   const [position, setPosition] = useState(new Position(defaultPosition))
   const [turn, setTurn] = useState('w')
-  const [history, setHistory] = useState([])
-  const [bestHistory, setBestHistory] = useState([])
   const [opening, setOpening] = useState(null)
   const [latestMove, setLatestMove] = useState(null)
   const [isCheck, setIsCheck] = useState(false)
   const [king, setKing] = useState(null)
   const [openingLength, setOpeningLength] = useState(0)
+
+  // Board Moves
+  const [history, setHistory] = useState([])
+  const [bestHistory, setBestHistory] = useState([])
+  const [elo, setElo] = useState([])
 
   // Board configuration
   const [flipped, setFlipped] = useState(false)
@@ -146,9 +149,10 @@ function ChessBoard() {
     <div>
       {evalBar && (
         <div className="eval-container">
-          <EvalBar depth={30} fen={position.fen()} />
+          <EvalBar depth={30} fen={position.fen()} setElo={setElo} elo={elo} />
         </div>
       )}
+
       <div>
         {timer && (
           <div className="clock">
@@ -230,11 +234,39 @@ function ChessBoard() {
           history={history}
           bestHistory={bestHistory}
           openingLength={openingLength}
+          elo={elo}
         />
-        <Stalemate showDialog={staleMateDialog} history={history} />
-        <Dead showDialog={insufficientMaterial} history={history} />
-        <Time showDialog={time} white={white.timer} black={black.timer} />
-        <Start start={startGame} showDialog={startingDialog} />
+        <Stalemate
+          showDialog={staleMateDialog}
+          history={history}
+          bestHistory={bestHistory}
+          openingLength={openingLength}
+          elo={elo}
+        />
+        <Dead
+          showDialog={insufficientMaterial}
+          history={history}
+          bestHistory={bestHistory}
+          openingLength={openingLength}
+          elo={elo}
+        />
+        <Time
+          showDialog={time}
+          white={white.timer}
+          black={black.timer}
+          history={history}
+          bestHistory={bestHistory}
+          openingLength={openingLength}
+          elo={elo}
+        />
+        <Start
+          start={startGame}
+          showDialog={startingDialog}
+          history={history}
+          bestHistory={bestHistory}
+          openingLength={openingLength}
+          elo={elo}
+        />
         <Config
           show={configOpened}
           setShow={setConfigOpened}

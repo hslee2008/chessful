@@ -4,7 +4,7 @@ import '../css/EvalBar.css'
 
 let stockfish = new Worker('/stockfish.js')
 
-const EvalBar = ({ fen, depth }) => {
+const EvalBar = ({ fen, depth, setElo, elo }) => {
   const [sfEval, setSfEval] = useState('')
   const [wHeight, setWHeight] = useState(50)
   const [FEN, setFEN] = useState(fen)
@@ -89,7 +89,9 @@ const EvalBar = ({ fen, depth }) => {
 
   useEffect(() => {
     setFEN(fen)
+    setElo([...elo, sfEval])
   }, [fen])
+
   useEffect(() => {
     stockfish.terminate()
     stockfish = new Worker('/stockfish.js')
@@ -104,22 +106,12 @@ const EvalBar = ({ fen, depth }) => {
 
   return (
     <div key={100} className="evalBar">
-      <div
-        style={{ height: `${100 - wHeight}%` }}
-        className="black-eval"
-      >
-        <span className="black-text">
-          {wHeight < 50 ? sfEval : ''}
-        </span>
+      <div style={{ height: `${100 - wHeight}%` }} className="black-eval">
+        <span className="black-text">{wHeight < 50 ? sfEval : ''}</span>
       </div>
-      <div
-        style={{ height: `${wHeight}%` }}
-        className="white-eval"
-      >
+      <div style={{ height: `${wHeight}%` }} className="white-eval">
         <div style={{ flex: '1' }} />
-        <span className="white-text">
-          {wHeight >= 50 ? sfEval : ''}
-        </span>
+        <span className="white-text">{wHeight >= 50 ? sfEval : ''}</span>
       </div>
     </div>
   )
