@@ -52,6 +52,7 @@ export function Analyze({ history, elo, openingLength }) {
             ? 'y'
             : 'r'
         }
+        turnVisible={false}
       />
       <Button onClick={handleNext}>Next</Button>
     </div>

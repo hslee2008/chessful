@@ -15,12 +15,15 @@ import { IconButton } from '@mui/material'
 import { findOpening } from '../utils/findOpening'
 import parseNotation from '../utils/parseNotation'
 import { getBestMove } from '../utils/bestNextMove'
-import { coordinateToSan } from '../utils/coordinateToSan'
 
 import EvalBar from './EvalBar'
 import { Checkmate, Stalemate, Dead, Time, Start } from './Dialog'
 import Config from './Config'
-import { smallScreenLimits, defaultPosition } from '../config/chessboard'
+import {
+  smallScreenLimits,
+  singleBoardLimits,
+  defaultPosition
+} from '../config/chessboard'
 
 function ChessBoard() {
   const game = new Game()
@@ -146,7 +149,7 @@ function ChessBoard() {
   }, [white.timer, black.timer, timer])
 
   return (
-    <div>
+    <div className="container">
       {evalBar && (
         <div className="eval-container">
           <EvalBar depth={30} fen={position.fen()} setElo={setElo} elo={elo} />
@@ -168,28 +171,31 @@ function ChessBoard() {
         <div className="opening">
           {opening && displayOpening && (
             <div>
-              <span className="opening-name">{opening}</span>
+              <p className="opening-name">{opening}</p>
             </div>
           )}
         </div>
 
         {!two ? (
-          <Chessboard
-            position={position}
-            flipped={flipped}
-            interactionMode="playMoves"
-            smallScreenLimits={smallScreenLimits}
-            pieceset={pieceset}
-            colorset={colorset}
-            squareSize={56}
-            squareMarkers={
-              color
-                ? (latestMove ? `Y${parseNotation(latestMove)}` : '') +
-                  (isCheck ? `,R${king}` : '')
-                : null
-            }
-            onMovePlayed={move => handleMovePlayed(move)}
-          />
+          <div className="one-board">
+            <Chessboard
+              position={position}
+              flipped={flipped}
+              interactionMode="playMoves"
+              smallScreenLimits={singleBoardLimits}
+              pieceset={pieceset}
+              colorset={colorset}
+              squareSize={56}
+              squareMarkers={
+                color
+                  ? (latestMove ? `Y${parseNotation(latestMove)}` : '') +
+                    (isCheck ? `,R${king}` : '')
+                  : null
+              }
+              onMovePlayed={move => handleMovePlayed(move)}
+              turnVisible={false}
+            />
+          </div>
         ) : (
           <div className="two-boards">
             <Chessboard
@@ -207,6 +213,7 @@ function ChessBoard() {
                   : null
               }
               onMovePlayed={move => handleMovePlayed(move)}
+              turnVisible={false}
             />
 
             <Chessboard
@@ -224,6 +231,7 @@ function ChessBoard() {
                   : null
               }
               onMovePlayed={move => handleMovePlayed(move)}
+              turnVisible={false}
             />
           </div>
         )}
