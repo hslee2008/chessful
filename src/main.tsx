@@ -1,16 +1,12 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import { TodoProvider } from './context'
-import {
-  createBrowserRouter,
-  RouterProvider,
-  Route,
-  Link
-} from 'react-router-dom'
+import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import { AnalysisProvider } from './context'
 import './index.css'
 
-import Home from './pages/home'
 import Analytics from './pages/analytics'
+import Home from './pages/chess'
+import { PlayVsStockfish } from './pages/ai'
 
 const router = createBrowserRouter([
   {
@@ -20,13 +16,17 @@ const router = createBrowserRouter([
   {
     path: '/analytics',
     element: <Analytics />
+  },
+  {
+    path: '/ai',
+    element: <PlayVsStockfish />
   }
 ])
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <TodoProvider>
+    <AnalysisProvider>
       <RouterProvider router={router} />
-    </TodoProvider>
+    </AnalysisProvider>
   </React.StrictMode>
 )

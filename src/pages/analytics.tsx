@@ -1,43 +1,62 @@
 // Packages
+import {
+  Grid,
+  LinearProgress,
+  createStyles,
+  makeStyles
+} from '@material-ui/core'
 import { FC } from 'react'
-import { Card, Grid, LinearProgress } from '@material-ui/core'
 
 //Components
-import BoardContainer from '../components/board_container'
-import AnalysisContainer from '../components/analysis_container'
+import AnalysisContainer from '../components/chess_analysis/analysis_container'
+import BoardContainer from '../components/chess_analysis/board_container'
 
 // Store
-import { useStore } from '../context'
+import { useAnalysisStore } from '../context'
+
+const useStyles = makeStyles(theme =>
+  createStyles({
+    board: {
+      margin: 5
+    },
+    analysis: {
+      margin: 5
+    },
+    container: {
+      display: 'flex',
+      [theme.breakpoints.down('sm')]: {
+        flexDirection: 'column'
+      },
+      [theme.breakpoints.up('sm')]: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: "100px"
+      }
+    }
+  })
+)
 
 const Analytics: FC = () => {
-  const store = useStore()
+  const store = useAnalysisStore()
   const { isEvaluationFinished, reportMoves, history } = store
+  const classes = useStyles()
 
   return (
-    <Grid container spacing={2}>
-      <Grid item xs={12}>
-        <Grid container spacing={2}>
-          <Grid item xs={2} />
-          <Grid item xs={8}>
-            <Grid container spacing={2}>
-              <Grid item xs={7}>
-                <BoardContainer />
-              </Grid>
-              <Grid item xs={4}>
-                {!isEvaluationFinished && (
-                  <LinearProgress
-                    value={(reportMoves.length / history.length) * 100}
-                    variant="determinate"
-                  />
-                )}
-                <AnalysisContainer />
-              </Grid>
-            </Grid>
-          </Grid>
-          <Grid item xs={2} />
-        </Grid>
-      </Grid>
-    </Grid>
+    <div className={classes.container}>
+      <div className={classes.board}>
+        <BoardContainer />
+      </div>
+      <div className={classes.analysis}>
+        <AnalysisContainer />
+        {!isEvaluationFinished && (
+          <LinearProgress
+            value={(reportMoves.length / history.length) * 100}
+            variant="determinate"
+          />
+        )}
+      </div>
+    </div>
   )
 }
 

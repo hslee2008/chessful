@@ -12,9 +12,9 @@ import SettingsIcon from '@mui/icons-material/Settings'
 import Button from '@mui/material/Button'
 import { IconButton } from '@mui/material'
 
-import { findOpening } from '../utils/findOpening'
-import parseNotation from '../utils/parseNotation'
-import { getBestMove } from '../utils/bestNextMove'
+import { findOpening } from '../../utils/findOpening'
+import parseNotation from '../../utils/parseNotation'
+import { getBestMove } from '../../utils/bestNextMove'
 
 import EvalBar from './EvalBar'
 import { Checkmate, Stalemate, Dead, Time, Start } from './Dialog'
@@ -23,7 +23,7 @@ import {
   smallScreenLimits,
   singleBoardLimits,
   defaultPosition
-} from '../config/chessboard'
+} from '../../config/chessboard'
 
 function ChessBoard() {
   const game = new Game()

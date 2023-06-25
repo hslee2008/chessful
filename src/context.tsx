@@ -1,17 +1,20 @@
 // Packages
-import React, { createContext, useContext } from "react";
-import { useLocalObservable } from "mobx-react-lite";
+import { useLocalObservable } from 'mobx-react-lite'
+import { createContext, useContext } from 'react'
 
 // Store
-import { createTodoStore, StoreProps } from "./stores/game";
+import { createAnalysisStore, StoreProps as analysisProps } from './stores/game'
 
-const AppContext = createContext(null);
+const AppContextAnalysis = createContext(null)
 
-export const TodoProvider = ({ children }: any) => {
-  const store: any = useLocalObservable(createTodoStore);
+export const AnalysisProvider = ({ children }: any) => {
+  const store: any = useLocalObservable(createAnalysisStore)
 
   return (
-    <AppContext.Provider value={store}>{children}</AppContext.Provider>
-  );
-};
-export const useStore: () => StoreProps = () => useContext<any>(AppContext);
+    <AppContextAnalysis.Provider value={store}>
+      {children}
+    </AppContextAnalysis.Provider>
+  )
+}
+export const useAnalysisStore: () => analysisProps = () =>
+  useContext<any>(AppContextAnalysis)

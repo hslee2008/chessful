@@ -1,5 +1,5 @@
-import { ChessInstance, Chess } from "chess.js";
-import { MoveStatus } from "../components/move";
+import { Chess, ChessInstance } from "chess.js";
+import { MoveStatus } from "../components/chess_analysis/move";
 
 export interface StoreProps {
   currentPgn: string,
@@ -28,7 +28,7 @@ export interface StoreProps {
   resetState: () => void
 }
 
-export const createTodoStore = (): StoreProps => {
+export const createAnalysisStore = (): StoreProps => {
   return {
     currentPgn: "",
     currentMove: 0,
@@ -97,7 +97,7 @@ export const createTodoStore = (): StoreProps => {
     },
     startEvaluate() {
       this.isEvaluationFinished = false;
-      this.worker = new Worker("src/lib/stockfish.js");
+      this.worker = new Worker("lib/stockfish.js");
 
       this.worker.addEventListener("message", this.onHandleEvent);
 
@@ -115,14 +115,14 @@ export const createTodoStore = (): StoreProps => {
       this.expectedMoves[this.currentMove] = bestMove != null ? bestMove[0] : "error";
       this.evaluatedGame?.move(this.history[this.currentMove]);
       this.currentMove++;
-   
+
       if (this.currentMove > this.history.length) {
         this.processResults()
         this.isEvaluationFinished = true;
 
         return;
       }
-        
+
       this.onEvaluateStart(this.evaluatedGame?.fen())
       this.processResults()
     },

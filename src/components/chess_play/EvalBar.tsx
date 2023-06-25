@@ -1,6 +1,6 @@
 import { Chess } from 'chess.js'
 import { useEffect, useState } from 'react'
-import '../css/EvalBar.css'
+import '../../css/EvalBar.css'
 
 let stockfish = new Worker('/stockfish.js')
 

@@ -5,10 +5,10 @@
   "homepage": "https://paulo9mv.github.io/chess",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "vite build",
     "preview": "vite preview",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist"
+    "deploy": "yarn run predeploy && firebase deploy"
   },
   "dependencies": {
     "@emotion/react": "^11.11.1",

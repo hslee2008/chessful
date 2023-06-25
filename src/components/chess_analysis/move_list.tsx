@@ -1,8 +1,7 @@
-import { Box, Button, Grid, Typography } from '@material-ui/core'
-import { createStyles, makeStyles } from '@material-ui/core'
+import { createStyles, Grid, makeStyles } from '@material-ui/core'
 import { observer } from 'mobx-react-lite'
-import { useStore } from '../context'
-import { StoreProps } from '../stores/game'
+import { useAnalysisStore } from '../../context'
+import { StoreProps } from '../../stores/game'
 import Commands from './commands'
 import Move from './move'
 import Report from './report'
@@ -19,20 +18,15 @@ const useStyles = makeStyles(theme =>
 )
 
 const Moves = () => {
-  const store = useStore() as StoreProps
+  const store = useAnalysisStore() as StoreProps
 
   const moves = store.history
 
   const { currentMoveOnTheBoard, reportMoves, expectedPoints, mateIn } = store
 
   return store.history.length ? (
-    <Grid
-      container
-      direction="column"
-      justifyContent="space-between"
-      style={{ height: '100%' }}
-    >
-      <Grid item xs={8} style={{ maxWidth: '100%', overflowY: 'scroll' }}>
+    <>
+      <>
         <Grid container>
           {moves.map((i, index) => {
             const status =
@@ -55,14 +49,14 @@ const Moves = () => {
             )
           })}
         </Grid>
-      </Grid>
-      <Grid item xs={2} style={{ maxWidth: '100%' }}>
-        <Report />
-      </Grid>
-      <Grid item xs={2} style={{ maxWidth: '100%' }}>
-        <Commands />
-      </Grid>
-    </Grid>
+        <Grid item>
+          <Report />
+        </Grid>
+        <Grid item>
+          <Commands />
+        </Grid>
+      </>
+    </>
   ) : null
 }
 

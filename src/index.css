@@ -13,6 +13,5 @@ code {
 }
 
 html, body, #app, #app>div {
-  height: 100%;
   background-color: #EEEEEE;
 }

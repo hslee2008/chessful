@@ -1,23 +1,31 @@
 import React, { useState } from 'react'
 import { Chessboard } from 'kokopu-react'
-import { defaultPosition } from '../config/chessboard'
+import { defaultPosition } from '../../config/chessboard'
 import { Position } from 'kokopu'
-import { rateMove } from '../utils/rateMove'
+import { rateMove } from '../../utils/rateMove'
 import Button from '@mui/material/Button'
 
 import '../css/Analyze.css'
 
-export function Analyze({ history, elo, openingLength }) {
+export function Analyze({
+  history,
+  elo,
+  openingLength
+}: {
+  history: any
+  elo: any
+  openingLength: any
+}) {
   const [index, setIndex] = useState(0)
   const [position, setPosition] = useState(new Position(defaultPosition))
   const [turn, setTurn] = useState('b')
 
-  const eloChange = elo.map((el, i) => {
+  const eloChange = elo.map((el: any, i: any) => {
     if (i === 0) return 0
     if (elo[i - 1].includes('#')) return 'mate'
     return el - elo[i - 1]
   })
-  const ratedMoves = eloChange.map((el, i) =>
+  const ratedMoves = eloChange.map((el: any, i: any) =>
     rateMove(el, turn, openingLength, i)
   )
 

@@ -5,11 +5,9 @@ import DialogActions from '@mui/material/DialogActions'
 import DialogContent from '@mui/material/DialogContent'
 import DialogContentText from '@mui/material/DialogContentText'
 import DialogTitle from '@mui/material/DialogTitle'
+import TextField from '@mui/material/TextField'
 import { Link } from 'react-router-dom'
-
-import { GameEndPlayStat } from './Stat'
-import { Analyze } from './Analyze'
-import toPGN from '../utils/toPGN'
+import toPGN from '../../utils/toPGN'
 
 function Checkmate({ showDialog, turn, history }) {
   const [open, setOpen] = useState(false)
@@ -88,16 +86,7 @@ function Time({
           <DialogContentText id="alert-dialog-description">
             {white === 0 ? 'Black' : 'White'} is the <mark>winner</mark> of the
             game
-            <GameEndPlayStat
-              history={history}
-              bestHistory={bestHistory}
-              openingLength={openingLength}
-            />
-            <Analyze
-              history={history}
-              elo={elo}
-              openingLength={openingLength}
-            />
+            <Link to={`/analytics?pgn=${toPGN(history)}`}>Analyze</Link>
           </DialogContentText>
         </DialogContent>
         <DialogActions>
@@ -135,16 +124,7 @@ function Stalemate({ showDialog, history, bestHistory, openingLength, elo }) {
         <DialogTitle id="alert-dialog-title">{'Stalemate (Draw)'}</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            <GameEndPlayStat
-              history={history}
-              bestHistory={bestHistory}
-              openingLength={openingLength}
-            />
-            <Analyze
-              history={history}
-              elo={elo}
-              openingLength={openingLength}
-            />
+            <Link to={`/analytics?pgn=${toPGN(history)}`}>Analyze</Link>
           </DialogContentText>
         </DialogContent>
         <DialogActions>
@@ -184,16 +164,7 @@ function Dead({ showDialog, history, bestHistory, openingLength, elo }) {
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            <GameEndPlayStat
-              history={history}
-              bestHistory={bestHistory}
-              openingLength={openingLength}
-            />
-            <Analyze
-              history={history}
-              elo={elo}
-              openingLength={openingLength}
-            />
+            <Link to={`/analytics?pgn=${toPGN(history)}`}>Analyze</Link>
           </DialogContentText>
         </DialogContent>
         <DialogActions>
@@ -231,6 +202,10 @@ function Start({ start, showDialog }) {
           <DialogContentText id="alert-dialog-description">
             Click on the piece you want to move and then click on the square you
             want to move to.
+
+            <br />
+
+            <Link to="/ai">Play against the AI</Link>
           </DialogContentText>
         </DialogContent>
         <DialogActions>

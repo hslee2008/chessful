@@ -1,13 +1,12 @@
 // Packages
-import { useMemo, useEffect } from 'react'
-import { Box, TextField, Button } from '@material-ui/core'
+import { Box, Button, TextField } from '@material-ui/core'
 import { observer } from 'mobx-react-lite'
-import { useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 
 // Store
-import { useStore } from '../context'
-import { StoreProps } from '../stores/game'
+import { useAnalysisStore } from '../../context'
+import { StoreProps } from '../../stores/game'
 
 function useQuery() {
   const { search } = useLocation()
@@ -15,7 +14,7 @@ function useQuery() {
 }
 
 const InputPgn = () => {
-  const store: StoreProps = useStore()
+  const store: StoreProps = useAnalysisStore()
   const query = useQuery()
   const [text, setText] = useState<string>('')
   const handleVerify = () => {
